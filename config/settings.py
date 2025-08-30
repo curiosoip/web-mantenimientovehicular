@@ -42,7 +42,7 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://web-mantenimientovehicular.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','https://mantenimiento-vehicular.up.railway.app', 'https://web-mantenimientovehicular.up.railway.app']
 
 ROOT_URLCONF = 'config.urls'
 
