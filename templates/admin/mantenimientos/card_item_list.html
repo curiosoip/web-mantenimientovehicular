@@ -1,0 +1,53 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg">
+    <div class="flex flex-col lg:flex-row w-full justify-between items-center">
+        <div class="flex w-full lg:w-auto justify-start p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="text-gray-700" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M21.7 13.35L19.2 12l2.5-1.35a.5.5 0 0 0 .25-.43V6.93a.5.5 0 0 0-.25-.43l-3.75-2.14a.5.5 0 0 0-.5 0L14 5.35l-3.5-2.06a.5.5 0 0 0-.5 0L6.25 6.5a.5.5 0 0 0-.25.43v3.29a.5.5 0 0 0 .25.43L8.5 12l-2.5 1.35a.5.5 0 0 0-.25.43v3.29c0 .18.1.34.25.43l3.75 2.14a.5.5 0 0 0 .5 0L14 18.65l3.5 2.06a.5.5 0 0 0 .5 0l3.75-2.14a.5.5 0 0 0 .25-.43v-3.29a.5.5 0 0 0-.3-.43z"/>
+            </svg>
+        </div>
+        <div class="flex flex-col w-full justify-start items-start px-3">
+            <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+                {{ mantenimiento.vehiculo.placa }}
+            </p>
+            <div class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+                <div class="flex gap-2">
+                    <strong>ID MANTENIMIENTO:</strong> {{ mantenimiento.id_mantenimiento }}
+                </div>
+                <div class="flex gap-2">
+                    <strong>TIPO:</strong> {{ mantenimiento.get_tipo_display }}
+                </div>
+                <div class="flex gap-2">
+                    <strong>ESTADO:</strong> {{ mantenimiento.get_estado_display }}
+                </div>
+                <div class="flex gap-2">
+                    <strong>DESCRIPCIÓN:</strong> {{ mantenimiento.descripcion }}
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2 w-full justify-between items-center">
+            <div class="flex flex-col lg:flex-row lg:gap-3 w-full justify-between items-start lg:items-center py-3">
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Fecha Programada:</strong> {{ mantenimiento.fecha_programada }}
+                </div>
+                {% if mantenimiento.fecha_realizado %}
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Fecha Realizado:</strong> {{ mantenimiento.fecha_realizado }}
+                </div>
+                {% endif %}
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Creado:</strong> {{ mantenimiento.fecha_registro }}
+                </div>
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Actualizado:</strong> {{ mantenimiento.fecha_actualizacion }}
+                </div>
+            </div>
+
+            <div class="flex py-1 h-full justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+                {% if user.rol == 'Administrador' %}
+                    {% include 'admin/mantenimientos/btn_eliminar_registro.html' with mantenimiento=mantenimiento %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

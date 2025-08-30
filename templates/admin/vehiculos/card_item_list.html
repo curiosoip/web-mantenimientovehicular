@@ -1,0 +1,40 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg">
+    <div class="flex flex-col lg:flex-row w-full justify-between items-center">
+        <div class="flex w-full lg:w-auto justify-start p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="text-gray-700" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.28 5.42 5.08 6.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 7h11l1.16 3.32c-.38.1-.66.45-.66.86 0 .28.11.53.29.71l.72.72V18H5v-6.39l.72-.72c.18-.18.29-.43.29-.71 0-.41-.28-.76-.66-.86L6.5 7zM7 16.5C7 15.67 7.67 15 8.5 15S10 15.67 10 16.5 9.33 18 8.5 18 7 17.33 7 16.5zm6 0c0-.83.67-1.5 1.5-1.5S16 15.67 16 16.5 15.33 18 14.5 18 13 17.33 13 16.5z" />
+            </svg>
+        </div>
+        <div class="flex flex-col w-full justify-start items-start px-3">
+            <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+                {{ vehiculo.marca }} {{ vehiculo.modelo }}
+            </p>
+            <p class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+                <div class="flex gap-2 text-xs text-gray-500"><strong>Placa:</strong> {{ vehiculo.placa }}</div>
+                <div class="flex gap-2 text-xs text-gray-500"><strong>Año:</strong> {{ vehiculo.anio }}</div>
+            </p>
+        </div>
+        <div class="flex gap-2 w-full justify-between items-center">
+            <div class="flex flex-col lg:flex-row lg:gap-3 w-full justify-between items-start lg:items-center py-3">
+                <div class="flex w-full justify-start items-center mx-3">
+                    <div class=" justify-center gap-2 text-xs bg-gray-600 rounded-full px-3 py-1 font-bold text-white">
+                        {{ vehiculo.tipo }}
+                    </div>
+                </div>
+
+
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Registrado:</strong>
+                    {{ vehiculo.fecha_registro }}
+                </div>
+            </div>
+            <div class="flex py-1 h-full justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+                {% if user.rol == 'Administrador' %}
+                {% include 'admin/vehiculos/btn_eliminar_registro.html' with vehiculo=vehiculo %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg">
+    <div class="flex flex-col lg:flex-row w-full justify-between items-center">
+        <div class="flex w-full lg:w-auto justify-start p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="text-gray-700" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M7 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2V2Zm2 1v1h6V3H9Zm-3 3v14h12V6H6Zm2 2h8v2H8V8Zm0 4h8v2H8v-2Zm0 4h5v2H8v-2Z"/>
+            </svg>
+        </div>
+        <div class="flex flex-col w-full justify-start items-start px-3">
+            <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+                Vehículo: {{ bitacora.vehiculo.placa }}
+            </p>
+            <div class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Conductor:</strong> {{ bitacora.conductor.get_full_name }}
+                </div>
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Fecha de viaje:</strong> {{ bitacora.fecha }}
+                </div>
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Ruta:</strong> {{ bitacora.ruta }}
+                </div>
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Kilómetros recorridos:</strong> {{ bitacora.kilometros_recorridos }}
+                </div>
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Observaciones:</strong> {{ bitacora.observaciones|default:"Ninguna" }}
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2 w-full justify-between items-center">
+            <div class="flex flex-col lg:flex-row lg:gap-3 w-full justify-between items-start lg:items-center py-3">
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Creado:</strong> {{ bitacora.fecha_registro }}
+                </div>
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Actualizado:</strong> {{ bitacora.fecha_actualizacion }}
+                </div>
+            </div>
+
+            <div class="flex py-1 h-full justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+                {% if user.rol == 'Administrador' %}
+                    {% include 'admin/bitacoras/btn_eliminar_registro.html' with bitacora=bitacora %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
