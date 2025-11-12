@@ -1,0 +1,54 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg">
+    <div class="flex flex-col lg:flex-row w-full gap-4 justify-between items-center">
+
+        <div class="flex w-full lg:w-auto justify-start p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M3 2h3c.28 0 .53.11.71.29l2.08 2.09l.8-.79C10 3.2 10.5 3 11 3h6c.5 0 1 .2 1.41.59l1 1C19.8 5 20 5.5 20 6v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8c0-.5.2-1 .59-1.41l.79-.8L5.59 4H3zm8 3v2h6V5zm.41 6l-2-2H8v1.41l2 2v3.18l-2 2V19h1.41l2-2h3.18l2 2H18v-1.41l-2-2v-3.18l2-2V9h-1.41l-2 2zm.59 2h2v2h-2z"/></svg>
+        </div>
+
+        <div class="flex flex-col w-full justify-start items-start px-3">
+            <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+                {{ consumo.vehiculo.marca }} {{ consumo.vehiculo.modelo }}
+            </p>
+            <div class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+                <div class="flex gap-2 text-xs uppercase text-gray-500">
+                    <strong>Placa:</strong> {{ consumo.vehiculo.placa }}
+                </div>
+                <div class="flex gap-2 text-xs text-gray-500">
+                    <strong>Chofer:</strong>
+                    {% if consumo.chofer %}
+                        {{ consumo.chofer.get_full_name|default:consumo.chofer.username }}
+                    {% else %}
+                        No asignado
+                    {% endif %}
+                </div>
+               
+            </div>
+        </div>
+        <div class="flex w-full flex-col lg:flex-row justify-center items-center gap-2">
+             <div class="flex flex-col h-full justify-between items-start text-md bg-slate-50 p-2 rounded-lg gap-1 px-2 py-1 text-gray-500 w-full" >
+            <strong class="m-0 p-0 text-xs">Listros:</strong>
+            {{ consumo.litros }}
+        </div>
+        <div class="flex flex-col h-full justify-between items-start text-md bg-slate-50 p-2 rounded-lg  gap-1 px-2 py-1 text-gray-500 w-full" >
+            <strong class="m-0 p-0 text-xs">Costo:</strong>
+            Bs {{ consumo.costo }}
+        </div>
+        <div class="flex flex-col justify-between items-start text-md bg-slate-50 p-2 rounded-lg gap-1 px-2 py-1 text-gray-500 w-full" >
+            <strong class="m-0 p-0 text-xs">Estación:</strong>
+            {{ consumo.estacion }}
+        </div>
+
+        <div class="flex flex-col h-full justify-between items-start text-md bg-slate-50 p-2 rounded-lg gap-1 px-2 py-1 text-gray-500 w-full" >
+            <strong class="m-0 p-0 text-xs">Registrado:</strong>
+            {{ consumo.fecha_registro|date:"d/m/Y" }}
+        </div>
+        </div>
+        <div class="flex py-1   p-2 gap-1 justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+            {% if user.rol == 'Administrador general' %}
+                {% include 'admin/consumos_combustible/btn_eliminar_registro.html' with consumo=consumo %}
+            {% endif %}
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,156 @@
+<!-- Botón para abrir el modal -->
+<button data-modal-target="bitacora-modal" data-modal-toggle="bitacora-modal" type="button"
+    class="text-white flex gap-2 justify-center items-center bg-gradient-to-br my-2 w-full lg:w-auto 
+           from-gray-400 to-gray-600 hover:bg-gradient-to-bl 
+           focus:ring-4 focus:outline-none focus:ring-gray-200 
+           dark:from-gray-700 dark:to-blue-900 dark:hover:from-blue-800 dark:hover:to-blue-900 
+           dark:focus:ring-blue-800 
+           font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="white" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z" />
+    </svg>
+    Registrar Bitácora
+</button>
+
+<!-- Modal de registro -->
+<div id="bitacora-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 bg-gray-800/20 dark:bg-gray-950/40 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Registrar Bitácora de Viaje
+                </h3>
+                <button type="button"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="bitacora-modal">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Cerrar modal</span>
+                </button>
+            </div>
+
+           <form method="POST" action="{% url 'registrar_bitacora' %}">
+                {% csrf_token %}
+
+                <!-- Errores -->
+                {% if form.errors %}
+                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul class="list-disc list-inside">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li><strong>{{ field|capfirst }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="p-4 md:p-5 space-y-4">
+                    <!-- Vehículo -->
+                    <div>
+                        <label for="vehiculo">Vehículo</label>
+                        <select name="vehiculo" id="vehiculo" required
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="" disabled selected>Seleccione vehículo</option>
+                            {% for v in vehiculos %}
+                                <option value="{{ v.id_vehiculo }}">{{ v.placa }} — {{ v.modelo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Chofer -->
+                    <div>
+                        <label for="chofer">Chofer</label>
+                        <select name="chofer" id="chofer" required
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="" disabled selected>Seleccione chofer</option>
+                            {% for c in choferes %}
+                                <option value="{{ c.id_usuario }}">{{ c.first_name }} {{ c.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Fecha -->
+                    <div>
+                        <label for="fecha">Fecha del viaje</label>
+                        <input type="date" name="fecha" id="fecha" required
+                            value="{{ form.fecha.value|default:'' }}"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+
+                    <div class="flex w-full justify-between items-center">
+                          <div>
+                        <label for="km_inicial">Kilómetro inicial</label>
+                        <input type="number" name="km_inicial" id="km_inicial" required
+                            value="{{ form.km_inicial.value|default:'' }}"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+
+                    <div>
+                        <label for="km_final">Kilómetro final</label>
+                        <input type="number" name="km_final" id="km_final" required
+                            value="{{ form.km_final.value|default:'' }}"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    </div>
+                  
+
+                    <div class="flex w-full justify-between items-center">
+                        <div>
+                            <label for="combustible_cargado">Combustible cargado (L)</label>
+                            <input type="number" name="combustible_cargado" id="combustible_cargado" step="0.01" required
+                                value="{{ form.combustible_cargado.value|default:'' }}"
+                                class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+
+                        <div>
+                            <label for="costo_combustible">Costo del combustible</label>
+                            <input type="number" name="costo_combustible" id="costo_combustible" step="0.01" required
+                                value="{{ form.costo_combustible.value|default:'' }}"
+                                class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>  
+                    
+
+                
+                    <div>
+                        <label for="foto_odometro_inicio">URL Foto Odómetro Inicio</label>
+                        <input type="url" name="foto_odometro_inicio" id="foto_odometro_inicio"
+                            value="{{ form.foto_odometro_inicio.value|default:'' }}"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+
+                    <div>
+                        <label for="foto_odometro_fin">URL Foto Odómetro Fin</label>
+                        <input type="url" name="foto_odometro_fin" id="foto_odometro_fin"
+                            value="{{ form.foto_odometro_fin.value|default:'' }}"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+
+                    
+                    <div>
+                        <label for="observaciones">Observaciones</label>
+                        <textarea name="observaciones" id="observaciones" rows="3"
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">{{ form.observaciones.value|default:'' }}</textarea>
+                    </div>
+
+                </div>
+
+                <div class="flex justify-end p-4 border-t dark:border-gray-600">
+                    <button type="submit"
+                        class="px-4 py-2 text-white bg-slate-600 rounded-lg shadow-sm hover:bg-slate-800">
+                        Guardar Bitácora
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% include 'componentes/error.html' with messages=messages %}

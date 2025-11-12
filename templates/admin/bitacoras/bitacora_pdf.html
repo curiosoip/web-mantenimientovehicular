@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitácora Vehicular - {{ bitacora.id_bitacora }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1, h2 { text-align: center; color: #222; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        td, th { border: 1px solid #aaa; padding: 8px; font-size: 14px; }
+        th { background-color: #f3f3f3; }
+        .imagenes { margin-top: 20px; display: flex; justify-content: space-around; }
+        img { width: 250px; border-radius: 10px; border: 1px solid #ddd; }
+        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #555; }
+        .boton-imprimir {
+            display: block; margin: 20px auto; padding: 10px 20px;
+            background: #007bff; color: white; text-decoration: none; border-radius: 6px;
+        }
+        @media print {
+            .boton-imprimir { display: none; }
+            body { margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>BITÁCORA VEHICULAR</h1>
+    <h2>{{ bitacora.vehiculo }}</h2>
+
+    <a href="#" class="boton-imprimir" onclick="window.print()">🖨️ Imprimir / Guardar PDF</a>
+
+    <table>
+        <tr><th>ID Bitácora</th><td>{{ bitacora.id_bitacora }}</td></tr>
+        <tr><th>Vehículo</th><td>{{ bitacora.vehiculo }}</td></tr>
+        <tr><th>Chofer</th><td>{{ bitacora.chofer }}</td></tr>
+        <tr><th>Fecha</th><td>{{ bitacora.fecha }}</td></tr>
+        <tr><th>Kilometraje Inicial</th><td>{{ bitacora.km_inicial }} km</td></tr>
+        <tr><th>Kilometraje Final</th><td>{{ bitacora.km_final }} km</td></tr>
+        <tr><th>Combustible Cargado</th><td>{{ bitacora.combustible_cargado }} L</td></tr>
+        <tr><th>Costo de Combustible</th><td>{{ bitacora.costo_combustible }} Bs</td></tr>
+        <tr><th>Observaciones</th><td>{{ bitacora.observaciones|default:"Sin observaciones" }}</td></tr>
+        <tr><th>Fecha Registro</th><td>{{ bitacora.fecha_registro|date:"d/m/Y H:i" }}</td></tr>
+    </table>
+
+    {% if bitacora.foto_odometro_inicio or bitacora.foto_odometro_fin %}
+    <div class="imagenes">
+        {% if bitacora.foto_odometro_inicio %}
+        <div>
+            <h4>Odómetro Inicio</h4>
+            <img src="{{ bitacora.foto_odometro_inicio }}" alt="Odómetro Inicio">
+        </div>
+        {% endif %}
+        {% if bitacora.foto_odometro_fin %}
+        <div>
+            <h4>Odómetro Fin</h4>
+            <img src="{{ bitacora.foto_odometro_fin }}" alt="Odómetro Fin">
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <p>Generado automáticamente el {{ bitacora.fecha_actualizacion|date:"d/m/Y H:i" }}</p>
+    </div>
+</body>
+</html>

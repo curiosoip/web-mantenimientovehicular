@@ -1,0 +1,42 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg">
+    <div class="flex flex-col lg:flex-row w-full justify-between items-center">
+        <div class="flex w-full lg:w-auto justify-start p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.707 3.293c-.39.39-.369 1.021-.138 1.523a2.83 2.83 0 0 1-3.753 3.753c-.502-.23-1.133-.252-1.523.138l-.586.586a1 1 0 0 0 0 1.414l10.586 10.586a1 1 0 0 0 1.414 0l.586-.586c.39-.39.369-1.021.138-1.523a2.83 2.83 0 0 1 3.753-3.753c.502.23 1.133.252 1.523-.138l.586-.586a1 1 0 0 0 0-1.414L10.707 2.707a1 1 0 0 0-1.414 0z"/></svg>
+        </div>
+        <div class="flex flex-col w-full justify-start items-start px-3">
+            <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+                
+                <strong>PLACA:</strong> {{ solicitud.vehiculo.placa }}
+            </p>
+            <div class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+               
+                <div class="flex gap-2">
+                    <strong>TIPO:</strong> {{ solicitud.get_tipo_display }}
+                </div>
+                <div class="flex gap-2">
+                    <strong>ESTADO:</strong> {{ solicitud.get_estado_display }}
+                </div>
+                <div class="flex gap-2">
+                    <strong>DESCRIPCIÓN:</strong> {{ solicitud.descripcion }}
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2 w-full justify-between items-center">
+            <div class="flex flex-col lg:flex-row lg:gap-3 w-full justify-between items-start lg:items-center py-3">
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Creado:</strong> {{ solicitud.fecha_registro }}
+                </div>
+                <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full" style="font-size: 10px;">
+                    <strong class="m-0 p-0">Actualizado:</strong> {{ solicitud.fecha_actualizacion }}
+                </div>
+            </div>
+
+            <div class="flex py-1 h-full justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+                {% if user.rol == 'Administrador general' %}
+                    {% include 'admin/mantenimientos/btn_eliminar_registro.html' with solicitud=solicitud %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

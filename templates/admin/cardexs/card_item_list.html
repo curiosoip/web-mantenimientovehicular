@@ -1,0 +1,65 @@
+{% load static %}
+<div class="flex w-full p-2 bg-white my-1 rounded-lg shadow-sm">
+  <div class="flex flex-col lg:flex-row w-full justify-between items-center">
+    <div class="flex w-full lg:w-auto justify-start p-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" d="M106.667 298.164h-.5v107.1h299.666v-107.1zm298.166-178.796v114.228h-41.666v-96.952l-.147-.147l-51.52-51.52l-.146-.146h-98.521v148.765h-41.666V43.164h157.462zM64.5 446.931V256.497h383v190.434zm276.333-254.434v41.667H235.167v-41.667zm-42.666-63.432v41.667h-63v-41.667zm-191-65.135h41.666v169.666h-41.666zM192.5 320.497h127v41.667h-127z" stroke-width="1"/></svg>
+    </div>
+    <div class="flex flex-col w-full justify-start w-full items-start px-3">
+      <p class="text-sm font-bold text-gray-700 truncate dark:text-white uppercase">
+        {{ cardex.vehiculo.marca }} {{ cardex.vehiculo.modelo }} — {{ cardex.vehiculo.placa }}
+      </p>
+
+      <div class="flex flex-col gap-1 text-xs text-gray-500 truncate dark:text-gray-400">
+        <div class="flex gap-2">
+          <strong>Departamento:</strong> {{ cardex.vehiculo.get_departamento_display|default:"-" }}
+        </div>
+        <div class="flex gap-2">
+          <strong>Año:</strong> {{ cardex.vehiculo.anio|default:"-" }}
+        </div>
+        <div class="flex gap-2">
+          <strong>ID:</strong> {{ cardex.id_cardex }}
+        </div>
+        
+      </div>
+    </div>
+    <div class="flex flex-col  lg:flex-row lg:gap-3 w-full justify-between items-start lg:items-center py-3">
+      <div class="flex flex-col  justify-center items-start py-2 px-4 gap-1 text-xs text-gray-600 w-full ">
+        <strong>Chofer asignado:</strong>
+        {% if cardex.vehiculo.chofer_asignado %}
+          {{ cardex.vehiculo.chofer_asignado.get_full_name|default:cardex.vehiculo.chofer_asignado.username }}
+        {% else %}
+          No asignado
+        {% endif %}
+      </div>
+
+      <div class="flex flex-col justify-center items-center py-2 px-3 gap-2 text-xs text-gray-600 w-full lg:w-1/4">
+        <div class="bg-slate-600 rounded-full text-center text-white px-3 py-1 min-w-[120px] font-bold">
+          {% with total=cardex.registros.count %}
+            Registros: {{ total }}
+          {% endwith %}
+        </div>
+        {% with ultima=cardex.registros.last %}
+          {% if ultima %}
+            <div class="text-xs text-gray-500">Último: {{ ultima.tipo|capfirst }} - {{ ultima.fecha|date:"d/m/Y" }}</div>
+          {% else %}
+            <div class="text-xs text-gray-500">Último: -</div>
+          {% endif %}
+        {% endwith %}
+      </div>
+
+     
+
+      <div class="flex flex-col gap-1 px-3 py-2 text-gray-500 w-full lg:w-1/4" style="font-size: 10px;">
+        <strong class="m-0 p-0">Creado:</strong>
+        {{ cardex.creado|date:"d/m/Y H:i" }}
+      </div>
+
+      <div class="flex py-1 w-full gap-2 justify-end items-end text-base font-semibold text-gray-900 dark:text-white">
+        {% if user.rol == 'Administrador general' %}
+          {% include 'admin/cardexs/btn_eliminar_registro.html' with cardex=cardex %}
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
