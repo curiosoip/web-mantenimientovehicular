@@ -1805,6 +1805,9 @@
   .list-disc {
     list-style-type: disc;
   }
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -1849,6 +1852,9 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
   }
   .space-y-1 {
     :where(& > :not(:last-child)) {
@@ -2771,6 +2777,9 @@
   .text-gray-900 {
     color: var(--color-gray-900);
   }
+  .text-green-500 {
+    color: var(--color-green-500);
+  }
   .text-green-800 {
     color: var(--color-green-800);
   }
@@ -2803,6 +2812,9 @@
   }
   .text-slate-800 {
     color: var(--color-slate-800);
+  }
+  .text-teal-600 {
+    color: var(--color-teal-600);
   }
   .text-white {
     color: var(--color-white);

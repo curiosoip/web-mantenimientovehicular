@@ -1,86 +1,70 @@
 <div class="flex flex-col w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-    <div class="flex justify-between items-start w-full">
-        <div class="flex-col items-center">
-            <div class="flex items-center mb-1">
-                <div>
-                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Bitácoras de viaje</h5>
-                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Segmentación según bitácoras
-                        de recorrido</p>
-                </div>
+    <div class="flex justify-between mb-3">
+        <div class="flex justify-center items-center">
+            <div>
+                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
+                    Repuestos Usados por Orden de Servicio
+                </h5>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+                    Cantidad de repuestos utilizados por cada orden de servicio
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="py-6" id="pie-chart-restricciones"></div>
+    <div class="py-6" id="donut-chart-repuestos"></div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const getChartOptionsRestricciones = () => {
-            // Obtén los datos de restricciones alimenticias desde Django
-            const chartData = JSON.parse('{{ chart_data_restricciones_json|safe }}');
+document.addEventListener("DOMContentLoaded", function () {
+    const chartData = JSON.parse('{{ chart_repuestos_json|escapejs }}');
 
-            return {
-                series: chartData.cantidad,  // Utiliza la cantidad de clientes con y sin restricciones
-                colors: ["#1C64F2", "#16BDCA"], // Colores para con y sin restricciones
-                chart: {
-                    height: 320,
-                    width: "100%",
-                    type: "pie",
-                },
-                stroke: {
-                    colors: ["white"],
-                },
-                plotOptions: {
-                    pie: {
-                        labels: {
+    // Fallback si no hay datos
+    const labels = chartData.labels && chartData.labels.length ? chartData.labels : ["Sin Datos"];
+    const series = chartData.series && chartData.series.length ? chartData.series : [0];
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    const randomColors = Array.from({ length: labels.length }, getRandomColor);
+
+    const chartOptions = {
+        series: series,
+        colors: randomColors,
+        chart: { height: 320, type: "donut" },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
                             show: true,
-                        },
-                        size: "100%",
-                        dataLabels: {
-                            offset: -25
+                            label: "Total Repuestos",
+                            formatter: function () {
+                                return series.reduce((a, b) => a + b, 0);
+                            }
                         }
-                    },
-                },
-                labels: chartData.categorias, // Utiliza las categorías de clientes
-                dataLabels: {
-                    enabled: true,
-                    formatter(val, opts) {
-                        const name = opts.w.globals.labels[opts.seriesIndex];
-                        return `${val.toFixed(1)}%`;
-                    },
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                    },
-                },
-                legend: {
-                    position: "bottom",
-                    fontFamily: "Inter, sans-serif",
-                },
-                yaxis: {
-                    labels: {
-                        formatter(val) {
-                            return val + "%";
-                        },
-                    },
-                },
-                xaxis: {
-                    labels: {
-                        formatter(val) {
-                            return val + "%";
-                        },
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    axisBorder: {
-                        show: false,
-                    },
-                },
-            };
-        };
+                    }
+                }
+            }
+        },
+        labels: labels,
+        legend: { position: "bottom" },
+        noData: {
+            text: 'No hay repuestos registrados',
+            align: 'center',
+            verticalAlign: 'middle',
+            style: { color: '#999', fontSize: '16px' }
+        }
+    };
 
-        const chart = new ApexCharts(document.querySelector("#pie-chart-restricciones"), getChartOptionsRestricciones());
-        chart.render();
-    });
+    const chart = new ApexCharts(document.getElementById("donut-chart-repuestos"), chartOptions);
+    chart.render();
+});
 </script>

@@ -1,46 +1,44 @@
 <div class="flex flex-col w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-    <div class="flex justify-between items-start w-full">
-        <div class="flex-col items-center">
-            <div class="flex items-center mb-1">
-                <div>
-                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Estado de vehículos</h5>
-                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Distribución de vehículos por
-                        estado</p>
-                </div>
-            </div>
+    <div class="flex justify-between mb-1">
+        <div>
+            <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Consumo de Combustible</h5>
+            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Litros de combustible usados por día de la semana</p>
         </div>
     </div>
-    <div class="py-6" id="pie-chart-estado-plan"></div>
+    <div id="chart-combustible-semana"></div>
 </div>
 
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        const data = JSON.parse('{{ chart_data_estado_plan_json|escapejs }}');
-        const categorias = data.categorias;
-        const porcentajes = data.porcentajes;
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const data = JSON.parse('{{ chart_combustible_semana_json|escapejs }}');
 
-        const getChartOptions = () => {
-            return {
-                series: porcentajes,
-                colors: ["#1E90FF", "#FF6347"],  // Colores para los diferentes estados
-                chart: {
-                    height: 320,
-                    type: "pie",
-                },
-                labels: categorias,
-                dataLabels: {
-                    enabled: true,
-                    formatter(val) {
-                        return `${val.toFixed(1)}%`;
-                    },
-                },
-                legend: {
-                    position: "bottom",
-                },
-            };
-        };
+    const categorias = data.labels; // Días de la semana
+    const valores = data.series[0].data;
 
-        const chart = new ApexCharts(document.querySelector("#pie-chart-estado-plan"), getChartOptions());
-        chart.render();
-    });
+    const options = {
+        series: [{
+            name: "Litros",
+            data: valores,
+            color: "#16BDCA",
+        }],
+        chart: {
+            type: "area",
+            height: 320,
+            fontFamily: "Inter, sans-serif",
+            toolbar: { show: false },
+        },
+        xaxis: { categories: categorias, labels: { rotate: -45 } },
+        yaxis: { labels: { formatter: val => val + " L" } },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3 },
+        fill: {
+            type: "gradient",
+            gradient: { shadeIntensity: 1, opacityFrom: 0.6, opacityTo: 0.1 }
+        },
+        tooltip: { y: { formatter: val => val + " litros" } }
+    };
+
+    const chart = new ApexCharts(document.getElementById("chart-combustible-semana"), options);
+    chart.render();
+});
 </script>

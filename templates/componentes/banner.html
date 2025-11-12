@@ -42,6 +42,17 @@
         {% endif %}
 
     {% endif %}
+    {% if user.rol == 'Chofer' %}
+        {% if request.path == '/panel/bitacoras/' %}
+            {% include 'admin/bitacoras/btn_formulario_registro.html' %}
+        {% endif %}
+        {% if request.path == '/panel/consumos-combustible/' %}
+            {% include 'admin/consumos_combustible/btn_formulario_registro.html' %}
+        {% endif %}
+        {% if request.path == '/panel/mantenimientos/solicitudes/' %}
+            {% include 'admin/mantenimientos/btn_formulario_registro.html' %}
+        {% endif %}
+    {% endif %}
 
 
 </div>

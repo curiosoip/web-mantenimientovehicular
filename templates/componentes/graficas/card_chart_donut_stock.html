@@ -5,62 +5,76 @@
     <div class="flex justify-between mb-3">
         <div class="flex justify-center items-center">
             <div>
-                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Solicitudes por Tipo</h5>
-                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Distribución de solicitudes por tipo de
-                    matenimiento</p>
+                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
+                    Órdenes por Tipo de Mantenimiento
+                </h5>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+                    Distribución de órdenes según el tipo de mantenimiento
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="py-6" id="donut-chart-pedidos"></div>
+    <div class="py-6" id="donut-chart-ordenes-tipo"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-            const data = JSON.parse('{{ chart_data_json|safe }}');
+document.addEventListener("DOMContentLoaded", function () {
+    // Parseamos el JSON de Django
+    const data = JSON.parse('{{ chart_ordenes_tipo_json|safe }}');
 
-            function getRandomColor() {
-                const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
+    // Fallback en caso de que no haya datos
+    const labels = data.labels && data.labels.length ? data.labels : ["Sin datos"];
+    const series = data.series && data.series.length ? data.series : [0];
 
-            const randomColors = Array.from({ length: data.labels.length }, getRandomColor);
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
-            const chartOptions = {
-                series: data.series,
-                colors: randomColors,  
-                chart: {
-                    height: 320,
-                    type: "donut",
-                },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            labels: {
-                                show: true,
-                                total: {
-                                    show: true,
-                                    label: "Total Pedidos",
-                                    formatter: function (w) {
-                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                                    },
-                                },
+    const randomColors = Array.from({ length: labels.length }, getRandomColor);
+
+    const chartOptions = {
+        series: series,
+        colors: randomColors,
+        chart: {
+            height: 320,
+            type: "donut",
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: "Total Órdenes",
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
                             },
                         },
                     },
                 },
-                labels: data.labels,
-                legend: {
-                    position: "bottom",
-                },
-            };
+            },
+        },
+        labels: labels,
+        legend: {
+            position: "bottom",
+        },
+        noData: {
+            text: 'No hay datos disponibles',
+            align: 'center',
+            verticalAlign: 'middle',
+            style: { color: '#999', fontSize: '16px' }
+        }
+    };
 
-            const chart = new ApexCharts(document.getElementById("donut-chart-pedidos"), chartOptions);
-            chart.render();
-        });
+    const chart = new ApexCharts(document.getElementById("donut-chart-ordenes-tipo"), chartOptions);
+    chart.render();
+});
 </script>
